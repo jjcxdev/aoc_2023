@@ -1,4 +1,4 @@
-// SOLUTION TO DAY 1 PART 1
+// DAY 1 PART 1
 function totalSumOfConcatenatedDigits(coordinates) {
   let totalSum = 0;
   
@@ -15,7 +15,7 @@ function totalSumOfConcatenatedDigits(coordinates) {
   return totalSum;
 }
 
-// SOLUTION TO DAY 1 PART 2
+// DAY 1 PART 2
 const wordMap = {
   'zero': 0,
   'one': 1,
