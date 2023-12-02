@@ -1,4 +1,4 @@
-//Day 2 Part 1
+// DAY 2 PART 1
 
 const maxColors = {
   'red': 12,
@@ -37,8 +37,6 @@ function getGamesNotExceedingMaxColors(games, maxColors) {
 
 const validGamesList = getGamesNotExceedingMaxColors(games, maxColors);
 
-console.log(validGamesList);
-
 function extractNumbersFromString(str) {
   return str.match(/\d+/g).join(' ');
 }
@@ -49,7 +47,6 @@ function getNumbersFromValidGames(validGames) {
 }
 
 const numbersString = getNumbersFromValidGames(validGamesList);
-console.log(numbersString)
 
 function sumNumbersInString(numbersString) {
   return numbersString.split(' ').reduce((sum, number) => sum + parseInt(number, 10), 0);
@@ -59,4 +56,46 @@ const numberString = getNumbersFromValidGames(validGamesList);
 const totalSum = sumNumbersInString(numbersString);
 console.log(totalSum);
 
-//Day 2 Part 2
+// DAY 2 PART 2
+function getMaxColorCountsInGame(game) {
+  const colorString = game.split(': ')[1];
+  const colorComponents = colorString.split(/[,;]/).map(s => s.trim().split(' '));
+  
+  let maxCounts = {};
+  
+  for (const [count, color] of colorComponents) {
+    if (!maxCounts[color]) {
+      maxCounts[color] = 0;
+    }
+    maxCounts[color] = Math.max(maxCounts[color], parseInt(count, 10));
+  }
+  
+  return maxCounts;
+}
+
+function getMaxCountsForEachGame(games) {
+  let gameMaxCounts = {};
+  
+  for (const game of games) {
+    const gameTitle = game.split(':')[0];
+    gameMaxCounts[gameTitle] = getMaxColorCountsInGame(game);
+  }
+  
+  return gameMaxCounts;
+}
+
+const gamesMaxColorCounts = getMaxCountsForEachGame(games);
+
+function sumProductOfMaxColorCounts(gamesMaxColorCounts) {
+  let totalSum = 0;
+  
+  for (const gameCounts of Object.values(gamesMaxColorCounts)) {
+    const product = Object.values(gameCounts).reduce((prod, count) => prod * count, 1);
+totalSum += product;
+  }
+  
+  return totalSum;
+}
+
+const totalSum = sumProductOfMaxColorCounts(gamesMaxColorCounts);
+console.log(totalSum);
