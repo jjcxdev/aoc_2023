@@ -59,3 +59,67 @@ const adjacentOffsets = [
 }
 
 console.log(sumIntegersAdjacentToSymbols(gridString));
+
+// DAY 3 PART 3
+
+function sumIntegersAdjacentToSymbols(gridString) {
+  const grid = gridString.split('\n').map(row => row.split(''));
+  const symbols = new Set (['$', '*', '/', '-', '#', '@', '&', '%', '=', '+']);
+  
+const adjacentOffsets = [
+        [-1, -1], [-1, 0], [-1, 1],
+        [0, -1],           [0, 1],
+        [1, -1], [1, 0], [1, 1]
+    ];
+
+    const foundIntegers = [];
+    const foundIndicies = new Map();
+
+    function findWholeNumber(y, x) {
+        let number = '';
+        let left = x;
+        while (left >= 0 && !isNaN(grid[y][left]) && grid[y][left] !== '.') {
+            number = grid[y][left] + number;
+            left--;
+        }
+        let right = x + 1;
+        while (right < grid[y].length && !isNaN(grid[y][right]) && grid[y][right] !== '.') {
+            number += grid[y][right];
+            right++;
+        }
+        return { number, index: left + 1 };
+    }
+
+    for (let y = 0; y < grid.length; y++) {
+        for (let x = 0; x < grid[y].length; x++) {
+            if (symbols.has(grid[y][x])) {
+                let adjacentNumbers = [];
+                for (let offset of adjacentOffsets) {
+                    const newY = y + offset[0];
+                    const newX = x + offset[1];
+                    if (newY >= 0 && newY < grid.length && newX >= 0 && newX < grid[newY].length && !isNaN(grid[newY][newX]) && grid[newY][newX] !== '.') {
+                      const { number, index } = findWholeNumber(newY, newX);
+                      const key = `${newY}, ${index}`;
+                        if (!foundIndicies.has(key)) {
+                            adjacentNumbers.push(number);
+                          foundIndicies.set(key, true);
+                        }
+                    }
+                }
+                if (adjacentNumbers.length >= 2) {
+                  for (let i = 0; i < adjacentNumbers.length; i++) {
+                    for (let j = i + 1; j < adjacentNumbers.length; j++) {
+                      const product = Number(adjacentNumbers[i]) * Number(adjacentNumbers[j]);
+                      foundIntegers.push(product);
+                    }
+                  }
+                }
+            }
+        }
+    }
+
+    const integersArray = foundIntegers.map(Number);
+    return integersArray.reduce((sum, num) => sum + num, 0);
+}
+
+console.log(sumIntegersAdjacentToSymbols(gridString));
